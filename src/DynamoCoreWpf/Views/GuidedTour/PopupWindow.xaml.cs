@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System;
+using System.IO;
+using System.Windows;
 using System.Windows.Controls.Primitives;
 using Dynamo.Wpf.UI.GuidedTour;
 using Dynamo.Wpf.ViewModels.GuidedTour;
@@ -36,6 +38,29 @@ namespace Dynamo.Wpf.Views.GuidedTour
             ContentRichTextBox.Width = popupViewModel.Width - 40;
             HorizontalOffset = hInfo.HorizontalPopupOffSet;
             VerticalOffset = hInfo.VerticalPopupOffSet;
+
+            if(string.IsNullOrEmpty(hInfo.HtmlPage))
+            {
+                ContentRichTextBox.Visibility = Visibility.Visible;
+                webView.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                string curDir = Directory.GetCurrentDirectory();
+                Uri webBrowserUri = new Uri(String.Format("file:///{0}/Views/GuidedTour/HtmlPages/{1}.html", curDir, hInfo.HtmlPage));
+                webView.Width = popupViewModel.Width - 40;
+                webView.Source = webBrowserUri;
+                webView.Loaded += WebView_Loaded1;
+
+                ContentRichTextBox.Visibility = Visibility.Hidden;
+                webView.Visibility = Visibility.Visible;
+            }
+
+        }
+
+        private void WebView_Loaded1(object sender, RoutedEventArgs e)
+        {
+            
         }
 
         private void StartTourButton_Click(object sender, System.Windows.RoutedEventArgs e)

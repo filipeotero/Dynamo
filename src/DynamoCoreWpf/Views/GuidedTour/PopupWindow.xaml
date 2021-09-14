@@ -4,6 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         xmlns:local="clr-namespace:Dynamo.Wpf.Views.GuidedTour"
+        xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
         xmlns:localui="clr-namespace:Dynamo.Wpf.UI.GuidedTour"
         xmlns:ui="clr-namespace:Dynamo.UI"
         mc:Ignorable="d"
@@ -52,7 +53,7 @@
                   DataContext="{Binding Step}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50"/>
-                    <RowDefinition Height="Auto" 
+                    <RowDefinition Height="*" 
                                    MinHeight="50"/>
                 </Grid.RowDefinitions>
                 
@@ -90,9 +91,14 @@
                                            IsDocumentEnabled="True"                                       
                                            Grid.Row="1"
                                            Margin="20,14,20,5"
+                                           Visibility="Hidden"
                                            CustomText="{Binding StepContent.FormattedText}"
                                            Style="{StaticResource CustomRichTextBoxStyle}">
                 </localui:CustomRichTextBox>
+
+                <DockPanel Grid.Row="1">
+                    <wv2:WebView2 x:Name="webView"/>
+                </DockPanel>
             </Grid>
             
             

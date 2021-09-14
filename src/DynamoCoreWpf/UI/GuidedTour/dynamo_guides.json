@@ -23,7 +23,7 @@
 				"Sequence": 1,
 				"Name": "library",
 				"Type": "tooltip",
-				"ShowLibrary":  true,
+				"ShowLibrary": true,
 				"TooltipPointerDirection": "top_left",
 				"Width": 480,
 				"Height": 250,
@@ -92,11 +92,11 @@
 					"VerticalPopupOffset": 50,
 					"HorizontalPopupOffset": 230
 				},
-				"UIAutomation":{
-						"Sequence": 1,
-						"ControlType": "MenuItem",
-						"Name": "dynamoMenu",
-						"Action": "open"
+				"UIAutomation": {
+					"Sequence": 1,
+					"ControlType": "MenuItem",
+					"Name": "dynamoMenu",
+					"Action": "open"
 				}
 			},
 			{
@@ -116,15 +116,35 @@
 					"VerticalPopupOffset": 20,
 					"HorizontalPopupOffset": 170
 				},
-				"UIAutomation":{
-						"Sequence": 1,
-						"ControlType": "MenuItem",
-						"Name": "HelpMenu",
-						"Action": "open"
+				"UIAutomation": {
+					"Sequence": 1,
+					"ControlType": "MenuItem",
+					"Name": "HelpMenu",
+					"Action": "open"
 				}
 			},
 			{
 				"Sequence": 6,
+				"Name": "library",
+				"Type": "tooltip",
+				"showLibrary": true,
+				"TooltipPointerDirection": "bottom_left",
+				"Width": 480,
+				"Height": 491,
+				"StepContent": {
+					"Title": "GetStartedGuideResourcesTitle",
+					"FormattedText": "GetStartedGuideResourcesText"
+				},
+				"HostPopupInfo": {
+					"PopupPlacement": "right",
+					"HostUIElementString": "sidebarGrid",
+					"VerticalPopupOffset": -25,
+					"HorizontalPopupOffset": 10,
+					"HtmlPage": "index"
+				}
+			},
+			{
+				"Sequence": 7,
 				"Name": "survey",
 				"Type": "survey",
 				"Width": 400,
