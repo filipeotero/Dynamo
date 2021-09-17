@@ -8,7 +8,7 @@
         xmlns:localui="clr-namespace:Dynamo.Wpf.UI.GuidedTour"
         xmlns:ui="clr-namespace:Dynamo.UI"
         mc:Ignorable="d"
-        PopupAnimation="Fade"
+        PopupAnimation="Fade"       
         AllowsTransparency="True"
         IsEnabled="True" 
         IsOpen="False"
@@ -96,9 +96,7 @@
                                            Style="{StaticResource CustomRichTextBoxStyle}">
                 </localui:CustomRichTextBox>
 
-                <DockPanel Grid.Row="1">
-                    <wv2:WebView2 x:Name="webView"/>
-                </DockPanel>
+                <wv2:WebView2 Name="webView" Grid.Row="1"  ></wv2:WebView2>
             </Grid>
             
             

@@ -2638,4 +2638,11 @@ Delete the following packages: {2}?
     <value>Show Preview Bubbles</value>
     <comment>Preferences | Visual Settings | Display Settings | Show Preview Bubbles</comment>
   </data>
+  <data name="PackagesGuide" xml:space="preserve">
+    <value>Packages</value>
+    <comment>Packages guide menu item</comment>
+  </data>
+  <data name="PackagesGuideLearnAboutPackagesTitle" xml:space="preserve">
+    <value>Learn about packages</value>
+  </data>
 </root>

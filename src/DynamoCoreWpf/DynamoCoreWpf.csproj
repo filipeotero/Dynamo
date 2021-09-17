@@ -1393,10 +1393,13 @@
     <Resource Include="UI\Images\profile_normal.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Views\GuidedTour\HtmlPages\Images\DynamoPackages_1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Views\GuidedTour\HtmlPages\Images\PackageResoursesImage.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Views\GuidedTour\HtmlPages\index.html">
+    <Content Include="Views\GuidedTour\HtmlPages\learnPackages.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Resource Include="UI\Images\watch_selected_48_48.png" />

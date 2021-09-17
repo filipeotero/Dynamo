@@ -125,26 +125,6 @@
 			},
 			{
 				"Sequence": 6,
-				"Name": "library",
-				"Type": "tooltip",
-				"showLibrary": true,
-				"TooltipPointerDirection": "bottom_left",
-				"Width": 480,
-				"Height": 491,
-				"StepContent": {
-					"Title": "GetStartedGuideResourcesTitle",
-					"FormattedText": "GetStartedGuideResourcesText"
-				},
-				"HostPopupInfo": {
-					"PopupPlacement": "right",
-					"HostUIElementString": "sidebarGrid",
-					"VerticalPopupOffset": -25,
-					"HorizontalPopupOffset": 10,
-					"HtmlPage": "index"
-				}
-			},
-			{
-				"Sequence": 7,
 				"Name": "survey",
 				"Type": "survey",
 				"Width": 400,
@@ -166,6 +146,31 @@
 					"HorizontalPopupOffset": 0
 				}
 			}
+		]
+	},
+	{
+		"Name": "Packages",
+		"GuideSteps": [
+			{				
+					"Sequence": 0,
+					"Name": "library",
+					"Type": "tooltip",
+					"TooltipPointerDirection": "top_left",
+					"Width": 482,
+					"Height": 518,
+					"StepContent": {
+						"Title": "PackagesGuideLearnAboutPackagesTitle",
+						"FormattedText": "GetStartedGuideResourcesText"
+					},
+				"HostPopupInfo": {
+					"PopupPlacement": "right",
+					"HostUIElementString": "HelpMenu",
+					"VerticalPopupOffset": -25,
+					"HorizontalPopupOffset": 10,
+					"HighlightColor": "#ef9362",
+					"HtmlPage": "learnPackages"
+				}
+			}			
 		]
 	}
 ]
