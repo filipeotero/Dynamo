@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -40,8 +41,15 @@ namespace Dynamo.Notifications
             this.dynamoView.LocationChanged += DynamoView_LocationChanged;
             this.notificationsButton.Click += NotificationsButton_Click;
 
-            notificationUIPopup.webView.EnsureCoreWebView2Async();
-            notificationUIPopup.webView.CoreWebView2InitializationCompleted += WebView_CoreWebView2InitializationCompleted;            
+
+            notificationUIPopup.webView.NavigationCompleted += WebView_NavigationCompleted;
+            notificationUIPopup.webView.EnsureCoreWebView2Async().ConfigureAwait(true);
+            notificationUIPopup.webView.CoreWebView2InitializationCompleted += WebView_CoreWebView2InitializationCompleted;
+        }
+
+        private void WebView_NavigationCompleted(object sender, Microsoft.Web.WebView2.Core.CoreWebView2NavigationCompletedEventArgs e)
+        {
+            SetWebViewHeight().ConfigureAwait(true);
         }
 
         private void WebView_CoreWebView2InitializationCompleted(object sender, Microsoft.Web.WebView2.Core.CoreWebView2InitializationCompletedEventArgs e)
@@ -62,8 +70,21 @@ namespace Dynamo.Notifications
                 htmlString = htmlString.Replace("mainJs", jsString);
             }
 
-            if(notificationUIPopup.webView.CoreWebView2 != null)
+            if (notificationUIPopup.webView.CoreWebView2 != null)
                 notificationUIPopup.webView.CoreWebView2.NavigateToString(htmlString);
+
+        }
+
+        private async Task SetWebViewHeight()
+        {
+            var heightString = await notificationUIPopup.webView.ExecuteScriptAsync("document.documentElement.getBoundingClientRect().height");
+            var height = float.Parse(heightString);
+            
+            //notificationUIPopup.webView.Height = height;
+            //notificationUIPopup.RootLayout.Height = height;
+            notificationUIPopup.Height = height;
+            notificationUIPopup.notificationsUIViewModel.PopupRectangleHeight = height;
+            notificationUIPopup.ConfigurePopupSize();
         }
 
         internal void Dispose()
@@ -91,6 +112,6 @@ namespace Dynamo.Notifications
             notificationUIPopup.IsOpen = !notificationUIPopup.IsOpen;
             if (notificationUIPopup.IsOpen)
                 notificationUIPopup.webView.Focus();
-        }        
+        }
     }
 }
