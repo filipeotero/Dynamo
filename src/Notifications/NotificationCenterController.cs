@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,6 +11,28 @@ using Dynamo.Notifications.View;
 
 namespace Dynamo.Notifications
 {
+    [ClassInterface(ClassInterfaceType.AutoDual)]
+    [ComVisible(true)]
+    public class scriptObject
+    {
+        NotificationUI notificationUI;
+
+        public scriptObject(NotificationUI notificationUI)
+        {
+            this.notificationUI = notificationUI;
+        }
+
+        public void ResizePopup(int height)
+        {
+            if(height <= 532)
+            {
+                notificationUI.notificationsUIViewModel.PopupRectangleHeight = height + 80;
+                notificationUI.notificationsUIViewModel.PopupBordersOffSet = notificationUI.notificationsUIViewModel.PopupBordersOffSet;
+                notificationUI.ConfigurePopupSize();
+            }
+        }
+    }
+
     public class NotificationCenterController
     {
         readonly NotificationUI notificationUIPopup;
@@ -40,7 +63,6 @@ namespace Dynamo.Notifications
             this.dynamoView.SizeChanged += DynamoView_SizeChanged;
             this.dynamoView.LocationChanged += DynamoView_LocationChanged;
             this.notificationsButton.Click += NotificationsButton_Click;
-
 
             notificationUIPopup.webView.NavigationCompleted += WebView_NavigationCompleted;
             notificationUIPopup.webView.EnsureCoreWebView2Async().ConfigureAwait(true);
@@ -73,18 +95,20 @@ namespace Dynamo.Notifications
             if (notificationUIPopup.webView.CoreWebView2 != null)
                 notificationUIPopup.webView.CoreWebView2.NavigateToString(htmlString);
 
+            notificationUIPopup.webView.CoreWebView2.AddHostObjectToScript("scriptObject", new scriptObject(notificationUIPopup));
         }
 
         private async Task SetWebViewHeight()
         {
-            var heightString = await notificationUIPopup.webView.ExecuteScriptAsync("document.documentElement.getBoundingClientRect().height");
-            var height = float.Parse(heightString);
-            
+            await notificationUIPopup.webView.ExecuteScriptAsync("window.RequestNotifications('http://d21acdehdx53uf.cloudfront.net/dynNotifications.json')");
+            //var heightString = await notificationUIPopup.webView.ExecuteScriptAsync("document.documentElement.getBoundingClientRect().height");
+            //var height = float.Parse(heightString);
+
             //notificationUIPopup.webView.Height = height;
             //notificationUIPopup.RootLayout.Height = height;
-            notificationUIPopup.Height = height;
-            notificationUIPopup.notificationsUIViewModel.PopupRectangleHeight = height;
-            notificationUIPopup.ConfigurePopupSize();
+            //notificationUIPopup.notificationsUIViewModel.PopupRectangleHeight = height;
+            //notificationUIPopup.notificationsUIViewModel.PopupBordersOffSet = notificationUIPopup.notificationsUIViewModel.PopupBordersOffSet;
+            //notificationUIPopup.notificationsUIViewModel.PopupRectangleHeight = height;
         }
 
         internal void Dispose()

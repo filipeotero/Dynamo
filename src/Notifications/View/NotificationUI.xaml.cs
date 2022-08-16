@@ -39,10 +39,14 @@ namespace Dynamo.Notifications.View
 
         internal void ConfigurePopupSize()
         {
+            //Due that we are drawing the Direction pointers on left and right side of the Canvas (10 width each one) then we need to add 20
+            RootLayout.Width = Width + (notificationsUIViewModel.PopupBordersOffSet * 2);
+            //Also a shadow of 10 pixels in top and 10 pixels at the bottom will be shown then we need to add 20
+            RootLayout.Height = Height + (notificationsUIViewModel.PopupBordersOffSet * 2);
             //The BackgroundRectangle represent the tooltip background rectangle that is drawn over a Canvas
             //Needs to be moved 10 pixels over the X axis to show the direction pointers (Height was already increased above)
             //Needs to be moved 10 pixels over the Y axis to show the shadow at top and bottom.
-            BackgroundRectangle.Rect = new Rect(10, 10, notificationsUIViewModel.PopupRectangleWidth, notificationsUIViewModel.PopupRectangleHeight);
+            BackgroundRectangle.Rect = new Rect(notificationsUIViewModel.PopupBordersOffSet, notificationsUIViewModel.PopupBordersOffSet, notificationsUIViewModel.PopupRectangleWidth, notificationsUIViewModel.PopupRectangleHeight);
 
             //The CustomRichTextBox has a margin of 10 in left and 10 in right, also there is a indentation for drawing the PointerDirection of 10 of each side so that's why we are subtracting 40.
             mainPopupGrid.Width = notificationsUIViewModel.PopupRectangleWidth;

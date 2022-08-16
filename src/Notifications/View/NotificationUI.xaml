@@ -13,7 +13,7 @@
        StaysOpen="False"
        Opacity="0.5"
        Width="340"
-       Height="598">
+       Height="{Binding PopupRectangleHeight}">
     <Popup.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -24,12 +24,15 @@
             <controls:PointsToPathConverter x:Key="PointsToPathConverter"/>
         </ResourceDictionary>
     </Popup.Resources>
-    <Canvas Background="Transparent"
+    <Canvas Background="Transparent"      
+            Height="{Binding PopupRectangleHeight}"
             Name="RootLayout" >
         <Path x:Name="PopupPathRectangle" 
+              Height="{Binding PopupRectangleHeight}"
               Style="{StaticResource PoupPathRectangleStyle}">
             <Path.Data>
                 <RectangleGeometry x:Name="BackgroundRectangle">
+
                 </RectangleGeometry>
             </Path.Data>
             <!--This effect will show a 4px shadow of 20% of tranparency with a angle of 135 grades-->
@@ -38,11 +41,13 @@
                                   Color="Black"
                                   ShadowDepth="4"
                                   BlurRadius="4"
-                                  Direction="135"/>
+                                  Direction="-90"/>
             </Path.Effect>
+            
         </Path>
 
         <Path x:Name="PopupPathRectangleShadow"   
+              Height="{Binding PopupRectangleHeight}"
               Style="{StaticResource PoupPathRectangleStyle}">
             <Path.Data>
                 <RectangleGeometry Rect="{Binding ElementName=BackgroundRectangle, Path=Rect}">
@@ -54,7 +59,7 @@
                                   Color="Black"
                                   ShadowDepth="4"
                                   BlurRadius="4"
-                                  Direction="315"/>
+                                  Direction="-90"/>
             </Path.Effect>
         </Path>
 
@@ -67,11 +72,12 @@
                                   Color="Black"
                                   ShadowDepth="4"
                                   BlurRadius="4"
-                                  Direction="{Binding Path=ShadowTooltipDirection}"/>
+                                  Direction="-90"/>
             </Path.Effect>
         </Path>
 
-        <Grid  x:Name="mainPopupGrid" Background="White"                
+        <Grid  x:Name="mainPopupGrid"          
+               Height="{Binding PopupRectangleHeight}"
                Width="{Binding PopupRectangleWidth}">
             <wv2:WebView2 Name="webView" ></wv2:WebView2>
         </Grid>
