@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
-using System.Linq;
-using System.Net;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,8 +9,6 @@ using Dynamo.Controls;
 using Dynamo.Logging;
 using Dynamo.Notifications.View;
 using Dynamo.ViewModels;
-using Dynamo.Wpf.ViewModels.Core;
-using Newtonsoft.Json;
 
 namespace Dynamo.Notifications
 {
@@ -32,10 +27,6 @@ namespace Dynamo.Notifications
         private static readonly string NotificationCenterButtonName = "notificationsButton";
 
         private DynamoLogger logger;
-        private static readonly DateTime notificationsCenterCreatedTime = DateTime.UtcNow;
-        private static System.Timers.Timer timer;
-        private string jsonStringFile;
-        private NotificationsModel notificationsModel;
 
         internal NotificationCenterController(DynamoView view, DynamoLogger dynLogger)
         {
@@ -55,45 +46,9 @@ namespace Dynamo.Notifications
                 HorizontalOffset = notificationPopupHorizontalOffset,
                 VerticalOffset = notificationPopupVerticalOffset
             };
-
             notificationUIPopup.webView.EnsureCoreWebView2Async();
             notificationUIPopup.webView.CoreWebView2InitializationCompleted += WebView_CoreWebView2InitializationCompleted;
             logger = dynLogger;
-
-            RequestNotifications();
-        }
-
-        private void WebView_NavigationCompleted(object sender, Microsoft.Web.WebView2.Core.CoreWebView2NavigationCompletedEventArgs e)
-        {
-            AddNotifications(notificationsModel.Notifications);
-        }
-
-        private void AddNotifications(List<NotificationItemModel> notifications)
-        {
-            var notificationsList = JsonConvert.SerializeObject(notifications);
-            InvokeJS($"window.setNotifications({notificationsList});");
-        }
-
-        private void RequestNotifications()
-        {
-            var uri = DynamoUtilities.PathHelper.getServiceBackendAddress(this, "notificationAddress");
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
-            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-
-            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-            using (Stream stream = response.GetResponseStream())
-            using (StreamReader reader = new StreamReader(stream))
-            {
-                jsonStringFile = reader.ReadToEnd();
-                notificationsModel = JsonConvert.DeserializeObject<NotificationsModel>(jsonStringFile);
-
-                var notificationsNumber = notificationsModel.Notifications.Count();
-
-                var shortcutToolbarViewModel = (ShortcutToolbarViewModel)dynamoView.ShortcutBar.DataContext;
-                shortcutToolbarViewModel.NotificationsNumber = notificationsNumber;
-            }
-
-            notificationUIPopup.webView.NavigationCompleted += WebView_NavigationCompleted;
         }
 
         private void WebView_CoreWebView2InitializationCompleted(object sender, Microsoft.Web.WebView2.Core.CoreWebView2InitializationCompletedEventArgs e)
@@ -117,6 +72,7 @@ namespace Dynamo.Notifications
             if (notificationUIPopup.webView.CoreWebView2 != null)
             {
                 notificationUIPopup.webView.CoreWebView2.NavigateToString(htmlString);
+                RefreshNotifications();
             }
         }
 
@@ -126,7 +82,6 @@ namespace Dynamo.Notifications
             dynamoView.SizeChanged -= DynamoView_SizeChanged;
             dynamoView.LocationChanged -= DynamoView_LocationChanged;
             notificationsButton.Click -= NotificationsButton_Click;
-            notificationUIPopup.webView.NavigationCompleted -= WebView_NavigationCompleted;
         }
 
         private void DynamoView_LocationChanged(object sender, EventArgs e)
