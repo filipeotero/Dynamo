@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using Dynamo.Wpf.ViewModels.Core;
 using Dynamo.UI.Commands;
 using Dynamo.Updates;
 using Dynamo.ViewModels;
@@ -44,6 +45,10 @@ namespace Dynamo.UI.Controls
             shortcutBarRightSideItems = new ObservableCollection<ShortcutBarItem>();    
 
             InitializeComponent();
+
+            var shortcutToolbar = new ShortcutToolbarViewModel();
+            DataContext = shortcutToolbar;
+
             UpdateControl.DataContext = updateManager;
         }
 

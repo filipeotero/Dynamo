@@ -214,7 +214,8 @@
                                                    Foreground="White" 
                                                    FontWeight="DemiBold"
                                                    TextAlignment="Center"
-                                                   FontSize="9">8
+                                                   Text="{Binding NotificationsNumber}"
+                                                   FontSize="9">
                                         </TextBlock>
                                     </Border>
                                 </DockPanel>
