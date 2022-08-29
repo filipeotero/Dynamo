@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls.Primitives;
 
 namespace Dynamo.Notifications.View
@@ -8,7 +9,7 @@ namespace Dynamo.Notifications.View
     /// </summary>
     public partial class NotificationUI : Popup
     {
-        private NotificationsUIViewModel notificationsUIViewModel;
+        internal NotificationsUIViewModel notificationsUIViewModel;
 
         public NotificationUI()
         {
@@ -21,6 +22,11 @@ namespace Dynamo.Notifications.View
 
             DataContext = notificationsUIViewModel;
 
+            UpdatePopupSize();
+        }
+
+        internal void UpdatePopupSize()
+        {
             //The BackgroundRectangle represent the tooltip background rectangle that is drawn over a Canvas
             //Needs to be moved 10 pixels over the X axis to show the direction pointers (Height was already increased above)
             //Needs to be moved 10 pixels over the Y axis to show the shadow at top and bottom.
