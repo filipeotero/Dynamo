@@ -177,7 +177,9 @@ namespace Dynamo.Notifications
                 notificationUIPopup.webView.CoreWebView2.NavigateToString(htmlString);
                 // Hosts an object that will expose the properties and methods to be called from the javascript side
                 notificationUIPopup.webView.CoreWebView2.AddHostObjectToScript("scriptObject", 
-                    new scriptObject(OnMarkAllAsRead));
+                    new ScriptObject(OnMarkAllAsRead));
+
+                notificationUIPopup.webView.CoreWebView2.Settings.IsZoomControlEnabled = false;
             }
         }
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -347,6 +347,51 @@ namespace Dynamo.LibraryViewExtensionMSWebBrowser
         /// </summary>
         /// <returns>LibraryView control</returns>
         internal void AddLibraryView()
+        {
+            LibraryViewModel model = new LibraryViewModel();
+            LibraryView view = new LibraryView(model);
+
+            var sidebarGrid = dynamoWindow.FindName("sidebarGrid") as Grid;
+            sidebarGrid.Children.Add(view);
+
+            browser = view.mainGrid.Children.OfType<WebView2>().FirstOrDefault();
+            browser.Loaded += Browser_Loaded;
+            browser.SizeChanged += Browser_SizeChanged;
+
+            this.browser = view.mainGrid.Children.OfType<WebView2>().FirstOrDefault();
+            InitializeAsync();
+
+            LibraryViewController.SetupSearchModelEventsObserver(browser, dynamoViewModel.Model.SearchModel, this, this.customization);
+        }
+
+        async void InitializeAsync()
+        {
+            browser.CoreWebView2InitializationCompleted += Browser_CoreWebView2InitializationCompleted;
+
+            if (!string.IsNullOrEmpty(WebBrowserUserDataFolder))
+            {
+                //This indicates in which location will be created the WebView2 cache folder
+                this.browser.CreationProperties = new CoreWebView2CreationProperties()
+                {
+                    UserDataFolder = WebBrowserUserDataFolder
+                };
+            }
+
+            await browser.EnsureCoreWebView2Async();
+            this.browser.CoreWebView2.WebMessageReceived += CoreWebView2_WebMessageReceived;
+            twoWayScriptingObject = new ScriptingObject(this);
+            //register the interop object into the browser.
+            this.browser.CoreWebView2.AddHostObjectToScript("bridgeTwoWay", twoWayScriptingObject);
+            browser.CoreWebView2.Settings.IsZoomControlEnabled = true;
+        }
+
+        private void CoreWebView2_WebMessageReceived(object sender, CoreWebView2WebMessageReceivedEventArgs args)
+        {
+            String strMessage = args.TryGetWebMessageAsString();
+            twoWayScriptingObject.Notify(strMessage);
+        }
+
+        private void Browser_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
         {
             LibraryViewModel model = new LibraryViewModel();
             LibraryView view = new LibraryView(model);

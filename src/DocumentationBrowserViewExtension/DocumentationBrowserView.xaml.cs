@@ -141,6 +141,20 @@ namespace Dynamo.DocumentationBrowser
             {
                 this.documentationBrowser.NavigateToString(htmlContent);
             }));
+
+            this.documentationBrowser.CoreWebView2.WebMessageReceived += CoreWebView2OnWebMessageReceived;
+            this.documentationBrowser.CoreWebView2.Settings.IsZoomControlEnabled = true;
+            this.documentationBrowser.CoreWebView2.Settings.AreDevToolsEnabled = true;
+        }
+
+        private void CoreWebView2OnWebMessageReceived(object sender, CoreWebView2WebMessageReceivedEventArgs e)
+        {
+            var message = e.TryGetWebMessageAsString();
+            if (string.Equals(message, "insert"))
+            {
+                // Insert the graph inside the current worskspace
+                this.viewModel.InsertGraph();
+            }
         }
 
         /// <summary>

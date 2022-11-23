@@ -348,10 +348,18 @@ namespace Dynamo.Utilities
                 };
             }
 
-            await webBrowserComponent.EnsureCoreWebView2Async();
-            // Context menu disabled
-            webBrowserComponent.CoreWebView2.Settings.AreDefaultContextMenusEnabled = false;
-            webBrowserComponent.NavigateToString(bodyHtmlPage);
+                await webBrowserComponent.EnsureCoreWebView2Async();
+                // Context menu disabled
+                webBrowserComponent.CoreWebView2.Settings.AreDefaultContextMenusEnabled = false;
+                webBrowserComponent.NavigateToString(bodyHtmlPage);
+
+                webBrowserComponent.CoreWebView2.Settings.IsZoomControlEnabled = false;
+                webBrowserComponent.CoreWebView2.Settings.IsPinchZoomEnabled = false;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         /// <summary>
