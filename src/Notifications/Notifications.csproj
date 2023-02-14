@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 	<ImportGroup Label="PropertySheets">
 		<Import Project="$(SolutionDir)Config\CS_SDK.props" />
 	</ImportGroup>
@@ -10,12 +10,23 @@
 		<AssemblyName>Notifications</AssemblyName>
 	</PropertyGroup>
 
-    <Target Name="NpmRunBuild" BeforeTargets="BeforeBuild">
+    <Target Name="CheckVersion" BeforeTargets="BeforeBuild" >
+
+        <Exec Command="npm view @dynamods/notifications-center version" ConsoleToMSBuild="true" >
+            <Output TaskParameter="ConsoleOutput" PropertyName="RemoteVersion"/>
+        </Exec>
+        <Exec Command="npm view ./Packages/NotificationCenter version" IgnoreExitCode="true" ConsoleToMSBuild="true">
+            <Output TaskParameter="ConsoleOutput" PropertyName="LocalVersion"/>
+        </Exec>
+
+    </Target>
+
+    <Target Name="NpmRunBuild" DependsOnTargets="CheckVersion" BeforeTargets="BeforeBuild" Condition="$(RemoteVersion)!=$(LocalVersion)">
         <!--This command gets the latest build from the notifcation center-->
         <Exec Command="npm pack @dynamods/notifications-center@latest" />
     </Target>
 
-    <Target Name="ExtractTGZFile" BeforeTargets="BeforeBuild">
+    <Target Name="ExtractTGZFile" BeforeTargets="BeforeBuild" Condition="$(RemoteVersion)!=$(LocalVersion)">
         <!--Locates the .tgz files-->
         <ItemGroup>
             <TGZFiles Include="./dynamods-notifications-center-*.tgz" />

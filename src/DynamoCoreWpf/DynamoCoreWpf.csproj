@@ -14,12 +14,24 @@
     <PreferredToolArchitecture>x64</PreferredToolArchitecture>
   </PropertyGroup>
 
-  <Target Name="NpmRunBuild" BeforeTargets="BeforeBuild">
+    <Target Name="CheckVersion" BeforeTargets="BeforeBuild" >
+
+        <Exec Command="npm view @dynamods/splash-screen version" ConsoleToMSBuild="true" >
+            <Output TaskParameter="ConsoleOutput" PropertyName="RemoteVersion"/>
+        </Exec>
+        <Exec Command="npm view ./Packages/SplashScreen version" IgnoreExitCode="true" ConsoleToMSBuild="true">
+            <Output TaskParameter="ConsoleOutput" PropertyName="LocalVersion"/>
+        </Exec>
+
+    </Target>
+
+
+    <Target Name="NpmRunBuild" DependsOnTargets="CheckVersion" BeforeTargets="BeforeBuild" Condition="$(RemoteVersion)!=$(LocalVersion)" >
       <!--This command gets the latest build from the splash screen-->
       <Exec Command="npm pack @dynamods/splash-screen@latest" />
-  </Target>
+    </Target>
 
-    <Target Name="ExtractTGZFile" DependsOnTargets="NpmRunBuild" BeforeTargets="BeforeBuild">        
+    <Target Name="ExtractTGZFile" DependsOnTargets="NpmRunBuild" BeforeTargets="BeforeBuild" Condition="$(RemoteVersion)!=$(LocalVersion)">        
         <!--Locates the .tgz files-->
         <ItemGroup>
             <TGZFiles Include="./dynamods-splash-screen-*.tgz" />
