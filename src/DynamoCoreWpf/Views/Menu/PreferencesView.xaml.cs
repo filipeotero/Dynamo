@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,6 +9,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using CoreNodeModels.Logic;
 using Dynamo.Configuration;
 using Dynamo.Controls;
 using Dynamo.Core;
@@ -17,6 +18,7 @@ using Dynamo.Logging;
 using Dynamo.UI;
 using Dynamo.UI.Views;
 using Dynamo.ViewModels;
+using Newtonsoft.Json.Linq;
 using Res = Dynamo.Wpf.Properties.Resources;
 
 namespace Dynamo.Wpf.Views
@@ -537,6 +539,10 @@ namespace Dynamo.Wpf.Views
 
             //Since the percentage goes from 10 to 300, the value is decremented by 10 to standardize. 
             double percentage = slider.Value - 25;
+
+            //The margin value for the label goes from - 480 to 310, resulting in 790 pixels from the starting point to the end.
+            //We also standardized the values ​​of the percentage(from 0 to 275).
+            //The value is decreased to 480 because the margin begins at - 480
             //This is the relation between the margin in pixels and the value of the percentage
             double marginValue = (790 * percentage / 275) - 480;
             if (lblZoomScalingValue != null)
