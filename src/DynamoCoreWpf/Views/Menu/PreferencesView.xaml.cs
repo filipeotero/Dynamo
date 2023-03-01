@@ -537,7 +537,7 @@ namespace Dynamo.Wpf.Views
         {
             Slider slider = (Slider)sender;
 
-            //Since the percentage goes from 10 to 300, the value is decremented by 10 to standardize. 
+            //Since the percentage goes from 25 to 300, the value is decremented by 25 to standardize. 
             double percentage = slider.Value - 25;
 
             //The margin value for the label goes from - 480 to 310, resulting in 790 pixels from the starting point to the end.
